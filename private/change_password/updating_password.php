@@ -1,4 +1,4 @@
-<?php include_once '../../config.php';
+<?php include_once '../../config.php'; checkLogin();
 
 $command = $conn->prepare('SELECT user_pw FROM user WHERE user_id=:user_id');
 $command->bindParam('user_id', $_POST['user_id']);

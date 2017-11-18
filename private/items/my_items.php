@@ -1,4 +1,4 @@
-<?php include_once '../../config.php';?>
+<?php include_once '../../config.php'; checkLogin();?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,7 +34,8 @@
         </ul>
         <div class="card-body row justify-content-center">
           <a href="#" class="card-link">Show</a>
-          <a href="#" class="card-link">Edit</a>
+          <a href="edit_item.php?itemid=<?php echo $item->item_id;?>" class="card-link">Edit</a>
+          <a href="remove_item.php?itemid=<?php echo $item->item_id;?>" class="card-link">Remove</a>
         </div>
       </div>
     <?php endforeach;?>

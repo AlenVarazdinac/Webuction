@@ -1,5 +1,4 @@
-<?php
-include_once '../../config.php';
+<?php include_once '../../config.php'; checkLogin();
 
 $date = date('Y-m-d H:i:s');
 
@@ -19,7 +18,7 @@ if(isset($_POST['item_name']) && isset($_POST['item_desc']) && isset($_POST['ite
 		move_uploaded_file($_FILES['imgfile']['tmp_name'], "../../img/items/" . $lastId . ".jpg");
 	}
 
-	header('location: ' . $appPath . 'index.php');	
+	header('location: ' . $appPath . 'private/items/my_items.php');	
 }
 
 	
