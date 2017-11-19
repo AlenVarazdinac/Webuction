@@ -17,7 +17,7 @@
     ?>
 
         <div class="container mt-5">
-            <h2 class="text-center">Add item</h2>
+            <h2 class="text-center">Edit item</h2>
             <div class="col-md-12 jumbotron">
 
                 <div class="row justify-content-center">
@@ -51,7 +51,7 @@
 
                             <div class="col-md-12">
                                 <div class="row justify-content-center">
-                                    <button type="submit" class="btn btn-primary">Add item</button>
+                                    <button type="submit" class="btn btn-primary">Edit item</button>
                                 </div>
                             </div>
 

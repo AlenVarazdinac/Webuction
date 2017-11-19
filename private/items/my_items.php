@@ -11,7 +11,7 @@
   $command = $conn->prepare("SELECT * FROM item WHERE item_added_by=:user_id");
   $command->bindParam(":user_id", $_SESSION['logged']->user_id);
   $command->execute();
-  $result = $command->fetchAll(PDO::FETCH_OBJ)
+  $result = $command->fetchAll(PDO::FETCH_OBJ);
   ?> 
 
   <div class="container mt-5">
@@ -22,15 +22,25 @@
 
 
    <div class="row justify-content-center">
-    <?php foreach($result as $item): ?>
+    <?php foreach($result as $item): 
+       
+        $fileName = '../../img/items/' . $item->item_id . '.jpg';
+        if(!file_exists($fileName)) {
+            $fileName = '../../img/items/no-item-image.png';
+        } ?>
+        
       <div class="card mr-1" style="width: 20rem;">
-        <img class="card-img-top" src="../../img/items/<?php echo $item->item_id;?>.jpg" alt="Item image">
+        <img class="card-img-top" 
+        src="<?php echo $fileName;?>" 
+        alt="Item image"
+        style="width: 320px; height: 220px;"/>
         <div class="card-body">
           <h4 class="card-title text-center"><?php echo $item->item_name;?></h4>
           <p class="card-text text-center"><?php echo $item->item_desc;?></p>
         </div>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item text-center">$<?php echo $item->item_price;?></li>
+          <li class="list-group-item text-center">Starting price - $<?php echo $item->item_starting_price;?></li>
+          <li class="list-group-item text-center">Current bid - $<?php echo $item->item_current_bid;?></li>
         </ul>
         <div class="card-body row justify-content-center">
           <a href="#" class="card-link">Show</a>
