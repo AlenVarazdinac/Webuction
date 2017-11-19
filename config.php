@@ -2,6 +2,8 @@
 
 session_start();
 
+include_once 'functions.php';
+
 $appName = 'Webuction';
 $appPath = '/projects/webuction/';
 $appVersion = '0.2.0';

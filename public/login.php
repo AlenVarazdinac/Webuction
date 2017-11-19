@@ -23,6 +23,14 @@
             </p>
         </div>
         <?php endif;?>
+        
+        <?php if(isset($_GET['login1st'])): ?>
+        <div class="col-md-12 alert alert-danger">
+            <p class="text-center">
+                You must be logged in to access this page.
+            </p>
+        </div>
+        <?php endif;?>
 
         <div class="col-md-12 jumbotron">
             <div class="row justify-content-center">
