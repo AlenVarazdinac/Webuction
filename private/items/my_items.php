@@ -40,7 +40,7 @@
         </div>
         <ul class="list-group list-group-flush">
           <li class="list-group-item text-center">Starting price - $<?php echo $item->item_starting_price;?></li>
-          <li class="list-group-item text-center">Current bid - $<?php echo $item->item_current_bid;?></li>
+          <li class="list-group-item text-center">Highest bid - $<?php echo $item->item_highest_bid;?></li>
         </ul>
         <div class="card-body row justify-content-center">
           <a href="#" class="card-link">Show</a>

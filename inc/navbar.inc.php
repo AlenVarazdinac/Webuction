@@ -12,7 +12,7 @@
                 </li>
                 <?php if(isset($_SESSION['logged'])): ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo $appPath;?>private/auctions.php">Auctions</a>
+                        <a class="nav-link" href="<?php echo $appPath;?>private/auction/auction_list.php">Auctions</a>
                     </li>
                 <?php endif;?>
                 <li class="nav-item">

@@ -19,7 +19,7 @@ CREATE TABLE item(
 	item_added_at			DATETIME,
 	item_added_by			INT NOT NULL,
     item_live               TINYINT(1) NOT NULL DEFAULT 0,
-    item_current_bid        DECIMAL(18,2) NOT NULL DEFAULT 0.0
+    item_highest_bid        DECIMAL(18,2) NOT NULL DEFAULT 0.0
 );
 
 CREATE TABLE bid(
