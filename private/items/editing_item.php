@@ -18,17 +18,18 @@ if(!empty($_POST['item_desc'])) {
     $itemDesc = $_POST['item_desc'];
 }
 
-if(!empty($_POST['item_price'])) {
-    $itemStartingPrice = $_POST['item_price'];
+if(!empty($_POST['item_starting_price'])) {
+    $itemStartingPrice = $_POST['item_starting_price'];
 }
 
 
 
-if(isset($_POST['item_name']) && isset($_POST['item_desc']) && isset($_POST['item_price']) && isset($_POST['user_id']) && isset($_POST['item_id'])) {
-    $command = $conn->prepare('UPDATE item SET item_name=:item_name, item_desc=:item_desc, item_price=:item_price WHERE item_id=:item_id');
+if(isset($_POST['item_name']) && isset($_POST['item_desc']) && isset($_POST['item_starting_price']) && isset($_POST['user_id']) && isset($_POST['item_id'])) {
+    $command = $conn->prepare('UPDATE item SET item_name=:item_name, item_desc=:item_desc, item_starting_price=:item_starting_price, item_highest_bid=:item_highest_bid WHERE item_id=:item_id');
 	$command->bindParam(':item_name', $itemName);
 	$command->bindParam(':item_desc', $itemDesc);
-	$command->bindParam(':item_price', $itemStartingPrice);
+	$command->bindParam(':item_starting_price', $itemStartingPrice);
+    $command->bindParam(':item_highest_bid', $itemStartingPrice);
 	$command->bindParam(':item_id', $_POST['item_id']);
 	$command->execute();
 

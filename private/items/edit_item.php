@@ -30,8 +30,12 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="item_price">Item price</label>
-                                <input type="number" step="0.01" class="form-control" id="item_price" name="item_price" placeholder="<?php echo $result->item_price;?>" />
+                                <label for="item_starting_price">Item starting price</label>
+                                <input type="number" step="0.01" class="form-control" id="item_starting_price" name="item_starting_price" placeholder="<?php echo $result->item_starting_price;?>" 
+                                <?php if($result->item_live===1) {
+                                        echo 'disabled'; }?>
+                                value="<?php if($result->item_live===1) {
+                                        echo $result->item_highest_bid; } ?>" />
                             </div>
 
                             <div class="form-group">
