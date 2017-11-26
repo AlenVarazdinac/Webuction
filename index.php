@@ -10,7 +10,7 @@
         <?php
         $command = $conn->query('SELECT count(*) c, bid_item, item_name, item_desc, item_id FROM bid a 
         LEFT JOIN item b ON bid_item=item_id
-        GROUP BY bid_item HAVING COUNT(*) > 0 ORDER BY count(*) DESC;;');
+        GROUP BY bid_item HAVING COUNT(*) > 0 ORDER BY count(*) DESC LIMIT 3;');
         $result = $command->fetchAll(PDO::FETCH_OBJ);
         ?>
 
@@ -41,8 +41,10 @@
                     <div class="card-body">
                         <h4 class="card-title"><?php echo $item->item_name;?></h4>
                         <p class="card-text"><?php echo $item->item_desc;?></p>
-                        <p class="card-text"><?php echo $item->c;?> Bids</p>
-                        <a href="#" class="btn btn-primary">Show</a>
+                        <p class="card-text text-center"><?php echo $item->c;?> Bids</p>
+                        <div class="row justify-content-center">
+                            <a href="#" class="btn btn-primary">Show</a>                            
+                        </div>
                     </div>
                 </div>
                 <?php endforeach;?>

@@ -54,10 +54,12 @@
                         echo $item->item_highest_bid;?>
                         </li>
                     </ul>
-
+                    
                     <div class="card-body row justify-content-center">
                         <a href="#" class="card-link">Show</a>
+                        <?php if($item->item_added_by!=$_SESSION['logged']->user_id): ?>
                         <a href="#" class="card-link" data-toggle="modal" data-target="#bidModal" data-itemid='<?php echo $item->item_id;?>' name="item_id">Bid</a>
+                        <?php endif;?>
                     </div>
                 </div>
                 <?php endforeach;?>

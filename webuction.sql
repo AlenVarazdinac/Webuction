@@ -8,15 +8,18 @@ CREATE TABLE user(
     user_name               VARCHAR(150) NOT NULL,
     user_email              VARCHAR(150) NOT NULL,
     user_pw                 CHAR(32) NOT NULL,
-    user_right              VARCHAR(30) NOT NULL DEFAULT 'Member'
+    user_right              VARCHAR(30) NOT NULL DEFAULT 'Member',
+    user_balance            DECIMAL(18,2) NOT NULL DEFAULT 1000
 );
 
 CREATE TABLE item(
 	item_id					INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	item_name				VARCHAR(150) NOT NULL,
-	item_desc				TEXT,
+	item_desc				TEXT NOT NULL,
 	item_starting_price		DECIMAL(18, 2) NOT NULL,
-	item_added_at			DATETIME,
+    item_added_at           DATETIME NOT NULL,
+	item_starting_at		DATETIME NOT NULL,
+    item_ending_at          DATETIME NOT NULL,
 	item_added_by			INT NOT NULL,
     item_live               TINYINT(1) NOT NULL DEFAULT 0,
     item_highest_bid        DECIMAL(18,2) NOT NULL DEFAULT 0.0

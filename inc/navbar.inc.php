@@ -26,6 +26,20 @@
             <?php else: ?>
                 <ul class="navbar-nav mr-0">
                     <li class="nav-item dropdown">
+                        <a class="nav-link" href="#"></a>
+                    </li>
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Balance $<?php if(isset($_SESSION['logged']->user_balance)) { echo $_SESSION['logged']->user_balance; }?>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Deposit</a>
+                            <a class="dropdown-item" href="#">Withdraw</a>
+                        </div>
+                    </li>
+                    
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <?php if(isset($_SESSION['logged']->user_name)) { echo $_SESSION['logged']->user_name; }?>
                         </a>
@@ -33,8 +47,10 @@
                             <a class="dropdown-item" href="<?php echo $appPath;?>private/profile.php">Profile</a>
                             <a class="dropdown-item" href="<?php echo $appPath;?>private/items/my_items.php">My items</a>
                             <a class="dropdown-item" href="<?php echo $appPath;?>private/change_password/new_password.php">Change password</a>
+                            <?php if($_SESSION['logged']->user_right==='Admin'): ?>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Admin panel</a>
+                            <?php endif;?>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item btn btn-outline-danger" href="<?php echo $appPath;?>public/logout.php">Log out</a>
                         </div>
