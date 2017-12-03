@@ -13,8 +13,16 @@
     $command = $conn->query('SELECT * FROM item a
         LEFT JOIN user b ON a.item_added_by=b.user_id WHERE a.item_live=1;');
     $command->execute();
-    $result = $command->fetchAll(PDO::FETCH_OBJ);
-
+    $result = $command->fetchAll(PDO::FETCH_OBJ);    
+    
+    function timeLength($sec)
+    {
+        $s=$sec % 60;
+        $m=(($sec-$s) / 60) % 60;
+        $h=floor($sec / 3600);
+        return $h.":".substr("0".$m,-2).":".substr("0".$s,-2);
+    }
+    
     
     ?>
        
@@ -33,35 +41,68 @@
             <div class="row justify-content-center">
                
                 <?php foreach($result as $item): 
-                $fileName = '../../img/items/' . $item->item_id . '.jpg';
-                if(!file_exists($fileName)) {
-                    $fileName = '../../img/items/no-item-image.png';
-                }
-                
-                ?>
-                
-                <div class="card mr-1 mt-2" style="width: 20rem;">
-                    <img class="card-img-top" src="<?php echo $fileName;?>" alt="Item image" style="width: 320px; height: 220px;" />
+                    $fileName = '../../img/items/' . $item->item_id . '.jpg';
+                    if(!file_exists($fileName)) {
+                        $fileName = '../../img/items/no-item-image.png';
+                    }
 
-                    <div class="card-body">
-                        <h4 class="card-title text-center">
-                            <?php echo $item->item_name;?>
-                        </h4>
+                    ?>
+
+                    <?php
+                    // Get end date
+                    $currentDateTime = strtotime(date('Y-m-d H:i:s'));
+                    $itemEndTime = strtotime($item->item_ending_at);
+                    $itemEnd = $itemEndTime - $currentDateTime;
+
+                    $dateNow = date('Y-m-d H:i:s', $currentDateTime);
+                    $dateEnd = date('Y-m-d H:i:s', $itemEndTime);
+                    ?>
+
+
+                    <div class="card mr-1 mt-2" style="width: 20rem;">
+                        <div class="card-header">
+                           <p class="timer" id="n_<?php echo $item->item_id;?>"><?php echo timeLength($itemEnd);?></p>
+                        </div>
+                        <img class="card-img-top" src="<?php echo $fileName;?>" alt="Item image" style="width: 320px; height: 220px;" />
+
+                        <div class="card-body">
+                            <h4 class="card-title text-center">
+                                <?php echo $item->item_name;?>
+                            </h4>
+                        </div>
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item text-center">Highest bid - $<?php
+                            echo $item->item_highest_bid;?>
+                            </li>
+                        </ul>
+
+                        <div class="card-body row justify-content-center">
+                            <a href="#" class="card-link">Show</a>
+                            <?php if($item->item_added_by!=$_SESSION['logged']->user_id): ?>
+                            <a href="#" class="card-link" data-toggle="modal" data-target="#bidModal" data-itemid='<?php echo $item->item_id;?>' name="item_id">Bid</a>
+                            <?php endif;?>
+                        </div>
                     </div>
-
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item text-center">Highest bid - $<?php
-                        echo $item->item_highest_bid;?>
-                        </li>
-                    </ul>
                     
-                    <div class="card-body row justify-content-center">
-                        <a href="#" class="card-link">Show</a>
-                        <?php if($item->item_added_by!=$_SESSION['logged']->user_id): ?>
-                        <a href="#" class="card-link" data-toggle="modal" data-target="#bidModal" data-itemid='<?php echo $item->item_id;?>' name="item_id">Bid</a>
-                        <?php endif;?>
-                    </div>
-                </div>
+                    <?php
+                    if(timeLength($itemEnd) === '00:00:00' || timeLength($itemEnd) <= '00:00:00') {
+                        $item_ended = true;
+                        $this_item_id = $item->item_id;
+                    }
+                    ?>
+                    
+                    
+                    <?php 
+                    /*
+                    if(!empty($dateNow) && !empty($dateEnd)) {
+                        if($dateNow>=$dateEnd) {
+                            $dateNow = $dateEnd;
+                        }     
+                    }
+                    */
+                    ?>
+                
                 <?php endforeach;?>
             </div>
 
@@ -95,10 +136,46 @@
 
         </div> <!-- / Container end -->
 
+        
+       
         <?php include_once '../../inc/footer.inc.php';?>
         <?php include_once '../../inc/scripts.inc.php';?>
         
         <script>
+            var item_ended = <?php if(!empty($item_ended)){echo $item_ended;} else {echo 0;}?>;
+            var item_id = "<?php if(!empty($this_item_id)){echo $this_item_id;}?>";
+            
+            console.log(item_ended);
+            
+            if(item_ended == 1) {
+                var request =  $.ajax({
+                method: 'POST',
+                url: 'update_auctions.php',
+                data: { itemid: item_id}
+                })  
+                
+                request.done(function( msg ) {
+                  console.log( msg );
+                });
+            }
+            
+            
+            
+            
+            var timer = document.getElementsByClassName('timer');
+                var timer_id = '';
+                for(var i=0; i<timer.length; i++) {
+                    timer_id += timer[i].id.split('_')[1];
+                }
+            
+            var timer_val = $('p #n_' + timer_id + ' .timer').text()
+            
+            
+            setInterval(function update(){
+                console.log(timer_val);
+            }, 1000);
+            
+            
             $('#bidModal').on('show.bs.modal', function(event) {
                 var button = $(event.relatedTarget) // Button that triggered the modal
                 var item = button.data('itemid') // Extract info from data-* attributes
@@ -108,6 +185,7 @@
                 //modal.find('.modal-title').text('New message to ' + item)
                 modal.find('#item_id').val(item)
             })
+            
         </script>
 </body>
 
