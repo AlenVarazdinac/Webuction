@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteBase /webuction/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule private/auction_list.js private/auction_list.php%{QUERY_STRING} [L]
