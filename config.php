@@ -22,6 +22,7 @@ try {
     $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     $conn->exec('SET CHARACTER SET utf8');
     $conn->exec('SET NAMES utf8');
+    $conn->exec('SET FOREIGN_KEY_CHECKS = 0');
 } catch(PDOException $e) {
     switch($e->getCode()) {
         case 2002:

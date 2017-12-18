@@ -10,8 +10,13 @@
     <?php include_once '../../inc/navbar.inc.php';?>
 
     <?php    
-    $command = $conn->query('SELECT * FROM item a
-        LEFT JOIN user b ON a.item_added_by=b.user_id WHERE a.item_live=1;');
+    $command = $conn->query('SELECT item_id, item_name, item_desc, item_starting_price,
+ item_owner, item_added_at, item_starting_at, item_ending_at,
+ item_live, bid_id, bid_by, bid_item, MAX(bid_amount) AS bid_amount, user_id,
+user_name, user_balance FROM item a
+LEFT JOIN bid b ON b.bid_item=a.item_id
+LEFT JOIN user c ON a.item_owner=c.user_id
+WHERE item_live=1 GROUP BY a.item_id;');
     $command->execute();
     $result = $command->fetchAll(PDO::FETCH_OBJ);    
     
@@ -72,14 +77,15 @@
                         </div>
 
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item text-center">Highest bid - $<?php
-                            echo $item->item_highest_bid;?>
+                            <li class="list-group-item text-center"><?php
+                            if(empty($item->bid_amount)) {echo 'Starting price $' . $item->item_starting_price;} else {echo 'Highest bid - $' . $item->bid_amount;}
+                            ?>
                             </li>
                         </ul>
 
                         <div class="card-body row justify-content-center">
                             <a href="#" class="card-link">Show</a>
-                            <?php if($item->item_added_by!=$_SESSION['logged']->user_id): ?>
+                            <?php if($item->item_owner!=$_SESSION['logged']->user_id): ?>
                             <a href="#" class="card-link" data-toggle="modal" data-target="#bidModal" data-itemid='<?php echo $item->item_id;?>' name="item_id">Bid</a>
                             <?php endif;?>
                         </div>
@@ -102,7 +108,6 @@
                     }
                     */
                     ?>
-                
                 <?php endforeach;?>
             </div>
 
@@ -147,33 +152,35 @@
             
             console.log(item_ended);
             
-            if(item_ended == 1) {
-                var request =  $.ajax({
-                method: 'POST',
-                url: 'update_auctions.php',
-                data: { itemid: item_id}
-                })  
-                
-                request.done(function( msg ) {
-                  console.log( msg );
-                });
-            }
-            
-            
-            
-            
             var timer = document.getElementsByClassName('timer');
                 var timer_id = '';
                 for(var i=0; i<timer.length; i++) {
                     timer_id += timer[i].id.split('_')[1];
                 }
             
-            var timer_val = $('p #n_' + timer_id + ' .timer').text()
+            var timer_val = $('p #n_' + timer_id + ' .timer').text();
             
+            $(document).ready(function(){
+                setInterval(function (){
+
+                    console.log(timer_val);
+
+                    if(item_ended == 1) {
+                    var request =  $.ajax({
+                    method: 'POST',
+                    url: 'update_auctions.php',
+                    data: { itemid: item_id}
+                    })  
+
+                    request.done(function( msg ) {
+                      console.log( msg );
+                    });
+
+                    }
+
+                }, 1000);    
+            });
             
-            setInterval(function update(){
-                console.log(timer_val);
-            }, 1000);
             
             
             $('#bidModal').on('show.bs.modal', function(event) {

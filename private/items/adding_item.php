@@ -33,21 +33,29 @@ switch($_POST['auction_end']){
 
 if(isset($_POST['item_name']) && isset($_POST['item_starting_price']) && isset($_POST['item_desc']) && isset($_POST['auction_start']) && isset($_POST['auction_end']) && isset($_POST['user_id'])) {
     
+    $conn->beginTransaction();
+    
     $command = $conn->prepare('INSERT INTO item 
-    (item_name, item_desc, item_starting_price, item_added_at, item_starting_at, item_ending_at, item_added_by, item_highest_bid, item_live) 
-    VALUES (:item_name, :item_desc, :item_starting_price, :item_added_at, :item_starting_at, :item_ending_at, :item_added_by, :item_highest_bid, :item_live)');
+    (item_name, item_desc, item_starting_price, item_added_at, item_starting_at, item_ending_at, item_owner, item_live) 
+    VALUES (:item_name, :item_desc, :item_starting_price, :item_added_at, :item_starting_at, :item_ending_at, :item_owner, :item_live)');
     $command->bindParam(':item_name', $_POST['item_name']);
     $command->bindParam(':item_desc', $_POST['item_desc']);
     $command->bindParam(':item_starting_price', $_POST['item_starting_price']);
     $command->bindParam(':item_added_at', $date);
     $command->bindParam(':item_starting_at', $startingDate);
     $command->bindParam(':item_ending_at', $auctionLength);
-    $command->bindParam(':item_added_by', $_POST['user_id']);
-    $command->bindParam(':item_highest_bid', $_POST['item_starting_price']);
+    $command->bindParam(':item_owner', $_POST['user_id']);
     $command->bindParam(':item_live', $itemLive);
     $command->execute();
     
     $lastId = $conn->lastInsertId();
+    
+    $command = $conn->prepare('INSERT INTO inventory (inventory_owner, inventory_item) VALUES (:inventory_owner, :inventory_item);');
+    $command->bindParam(':inventory_owner', $_POST['user_id']);
+    $command->bindParam(':inventory_item', $lastId);
+    $command->execute();
+    
+    $conn->commit();
 
 	if(isset($_FILES['imgfile'])) {
 		move_uploaded_file($_FILES['imgfile']['tmp_name'], "../../img/items/" . $lastId . ".jpg");

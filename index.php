@@ -8,8 +8,8 @@
         <?php include_once 'inc/navbar.inc.php';?>
         
         <?php
-        $command = $conn->query('SELECT count(*) c, bid_item, item_name, item_desc, item_id FROM bid a 
-        LEFT JOIN item b ON bid_item=item_id
+        $command = $conn->query('SELECT count(*) c, bid_item, item_name, item_desc, item_id, item_live FROM bid a 
+        LEFT JOIN item b ON bid_item=item_id WHERE item_live=1 
         GROUP BY bid_item HAVING COUNT(*) > 0 ORDER BY count(*) DESC LIMIT 3;');
         $result = $command->fetchAll(PDO::FETCH_OBJ);
         ?>
