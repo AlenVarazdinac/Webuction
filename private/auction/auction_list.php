@@ -66,7 +66,7 @@ WHERE item_live=1 GROUP BY a.item_id;');
 
                     <div class="card mr-1 mt-2" style="width: 20rem;">
                         <div class="card-header">
-                           <p class="timer" id="n_<?php echo $item->item_id;?>"><?php echo timeLength($itemEnd);?></p>
+                           <span class="timer" id="n_<?php echo $item->item_id;?>"><?php echo timeLength($itemEnd);?></span>
                         </div>
                         <img class="card-img-top" src="<?php echo $fileName;?>" alt="Item image" style="width: 320px; height: 220px;" />
 
@@ -160,26 +160,24 @@ WHERE item_live=1 GROUP BY a.item_id;');
             
             var timer_val = $('p #n_' + timer_id + ' .timer').text();
             
-            $(document).ready(function(){
-                setInterval(function (){
+            setInterval(function (){
 
-                    console.log(timer_val);
+                console.log(timer_val);
 
-                    if(item_ended == 1) {
-                    var request =  $.ajax({
-                    method: 'POST',
-                    url: 'update_auctions.php',
-                    data: { itemid: item_id}
-                    })  
+                if(item_ended == 1) {
+                var request =  $.ajax({
+                method: 'POST',
+                url: 'update_auctions.php',
+                data: { itemid: item_id}
+                })  
 
-                    request.done(function( msg ) {
-                      console.log( msg );
-                    });
+                request.done(function( msg ) {
+                  console.log( msg );
+                });
 
-                    }
+                }
 
-                }, 1000);    
-            });
+            }, 1000);  
             
             
             

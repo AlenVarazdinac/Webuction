@@ -27,9 +27,11 @@
                 <h1 class="text-center display-4">Welcome to <?php echo $appName;?></h1>
                 <h4 class="text-center">Biggest online auction!</h4>
             </div>
-
+            
+            <?php if(!empty($result)): ?>
             <h3 class="text-center mt-3">Hot ongoing deals!</h3>
-
+            <?php endif;?>
+            
             <div class="row justify-content-center mt-4">
                 <?php foreach($result as $item): 
                 $fileName = 'img/items/' . $item->item_id . '.jpg';
